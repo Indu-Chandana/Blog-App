@@ -39,6 +39,41 @@ export const getPosts = async () => {
   return result.postsConnection.edges;
 }
 
+export const getPostDetails = async (slug) => { //we get slug. when we call it. under ($slug: String!) we are accepting a slug thats going to be a string. 1.45.13min
+  const query = gql`
+    query GetPostDetails($slug: String!) {
+      post(where: { slug: $slug }){
+              author {
+                bio
+                name
+                id
+                photo {
+                  url
+                }
+              }
+              createdAt
+              slug
+              title
+              excerpt
+              featuredImage {
+                url
+              }
+              categories {
+                name
+                slug
+              }
+              content {
+                raw
+              }
+            }
+          }
+    `
+
+  const result = await request(graphqlAPI, query, { slug }); // we can pass slug and object as the third parameter
+
+  return result.post;
+}
+
 // we can create new export const get RecentPosts. this create using manualy not using GraphCMS Playground.
 export const getRecentPosts = async () => {
   const query = gql`
@@ -63,7 +98,7 @@ export const getRecentPosts = async () => {
 }
 
 // This create using manualy not using GraphCMS Playground.
-export const getSimilarPosts = async () => {
+export const getSimilarPosts = async (categories, slug) => {
   const query = gql`
     query GetPostDetails($slug: String!, $categories: [String!]) {
        posts(
@@ -80,7 +115,7 @@ export const getSimilarPosts = async () => {
     }
   `
 
-  const result = await request(graphqlAPI, query);
+  const result = await request(graphqlAPI, query, { categories, slug });
 
   return result.posts;
 }

@@ -3,13 +3,13 @@ import moment from 'moment';
 import Link from 'next/link';
 import { getRecentPosts, getSimilarPosts } from '../services';
 
-const PostWidget = ({ categories, slug }) => {
+const PostWidget = ({ categories, slug }) => { //That is comming from [slug].js. we simply manage that and send it.
     const [relatedPosts, setRelatedPosts] = useState([]);
 
     useEffect(() => {
         if (slug) {
-            getSimilarPosts(categories, slug)
-                .then((result) => setRelatedPosts(result))
+            getSimilarPosts(categories, slug) // we pass that to services (categories, slug) 1.50.00min
+                .then((result) => setRelatedPosts(result)) 
         } else {
             getRecentPosts()
                 .then((result) => setRelatedPosts(result))
